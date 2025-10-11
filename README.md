@@ -28,11 +28,11 @@ As principais tecnologias aplicadas no desenvolvimento deste projeto são:
 
 O sistema foi modelado com base nas seguintes entidades principais:
 
-* **Serviços**: Armazena os serviços oferecidos para o CRUD (Criar, Ler, Atualizar, Deletar).
-* **Projetos**: Funciona como o portfólio da vitrine digital, exibindo trabalhos anteriores.
-* **Usuários**: Armazena as credenciais para acesso ao painel administrativo.
-* **Produtos**: Representa os itens (roupas, acessórios, cosméticos etc.) comercializados pelo ateliê.
-* **Agendamentos**: Gerencia o agendamento de serviços feito por clientes.
+* **Serviços de Costura**: Armazena os serviços oferecidos para o CRUD (Criar, ler, atualizar, deletar).
+* **Serviços de Estética**: Exibe os serviços de estética, e seus valores. 
+* **Projetos**: Funciona como o portfólio da vitrine digital, exibindo os trabalhos anteriores.
+* **Usuários**: Armazena as credenciais para acesso ao painel administrativo onde o CRUD será gerenciado.
+* **Agendamentos**: Representa o agendamento de um serviço (costura, estética, etc.) feito por um cliente.
 
 O banco de dados, nomeado `atelie_laudir`, é composto pelas coleções `servicos`, `projetos` e `usuarios`, que armazenam as informações conforme o schema definido no diagrama do projeto.
 

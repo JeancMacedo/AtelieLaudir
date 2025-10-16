@@ -12,8 +12,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Simple root route
+// Serve static view files
+app.use(express.static(path.join(__dirname, 'View')));
+
 app.get('/', (req, res) => {
-	res.send('Ateliê Laudir API - Express & MongoDB');
+	res.sendFile(path.join(__dirname, 'View', 'index.html'));
 });
 
 // Mount service routes

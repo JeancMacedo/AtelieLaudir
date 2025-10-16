@@ -55,3 +55,64 @@ A aplicação conta com telas essenciais para apresentar o ateliê e permitir a 
 
 * **Página Inicial / Nossa História**: Apresenta a história do Ateliê Laudir e sua fundadora.
 * **Fale Conosco**: Exibe informações de contato e um formulário para envio de mensagens.
+
+---
+
+## Como rodar localmente (Node + MongoDB)
+
+Passos rápidos para executar a API localmente:
+
+1. Instale Node.js (v16+).
+2. Na raiz do projeto rode:
+
+	npm install
+
+3. Crie um arquivo `.env` copiando `.env.example` e ajuste `MONGODB_URI` se necessário.
+
+4. Inicie o servidor em modo desenvolvimento:
+
+	npm run dev
+
+O servidor será iniciado em http://localhost:3000 por padrão.
+
+## MongoDB — instruções completas
+
+Você pode usar MongoDB local (instalado no Windows) ou MongoDB Atlas (nuvem). A string de conexão padrão no projeto é:
+
+```
+mongodb://localhost:27017/atelie_laudir
+```
+
+Opção A — MongoDB local no Windows:
+
+- Baixe o instalador do MongoDB Community Server: https://www.mongodb.com/try/download/community
+- Instale como serviço (opção recomendada). O banco usará por padrão o diretório C:\\data\\db.
+- Verifique o serviço no PowerShell:
+
+```powershell
+Get-Service -Name MongoDB* | Format-Table -AutoSize
+```
+
+Opção B — MongoDB Atlas (cloud):
+
+- Crie uma conta e um cluster grátis em https://www.mongodb.com/cloud/atlas
+- Configure Database Access (usuário/senha) e Network Access (seu IP de desenvolvimento).
+- Copie a string de conexão do Atlas para `MONGODB_URI` em `.env`.
+
+Exemplo:
+
+```
+MONGODB_URI=mongodb+srv://user:password@cluster0.abcd.mongodb.net/atelie_laudir?retryWrites=true&w=majority
+```
+
+## Rotas de API (inicial)
+
+GET /services  -> Lista todos os serviços (rota usada para teste inicial)
+POST /services -> Cria um novo serviço
+GET /services/:id -> Obtém um serviço por id
+PUT /services/:id -> Atualiza um serviço
+DELETE /services/:id -> Remove um serviço
+
+---
+
+Se quiser, eu posso agora instalar as dependências e iniciar o servidor para verificar que tudo funciona (preciso que você permita rodar comandos no terminal). Caso prefira, eu também posso orientar passo-a-passo para você executar localmente.

@@ -40,8 +40,11 @@ document.getElementById('btnColorblind').addEventListener('click', () => setDalt
 // Apply persisted dalton mode on load
 setDaltonic(isDaltonic());
 
-async function fetchServices() {
-  const res = await fetch('/services');
+let currentPage = 1;
+let currentLimit = 10;
+
+async function fetchServices(page = 1, limit = 10) {
+  const res = await fetch(`/services?page=${page}&limit=${limit}`);
   return res.json();
 }
 
@@ -51,15 +54,22 @@ function showAlert(message, type = 'success') {
   setTimeout(() => area.innerHTML = '', 4000);
 }
 
-async function render() {
+async function render(page = currentPage, limit = currentLimit) {
   const tbody = document.getElementById('list');
   tbody.innerHTML = '<tr><td colspan="5">Carregando...</td></tr>';
   try {
-    const data = await fetchServices();
+    const payload = await fetchServices(page, limit);
+    // payload: { data, page, limit, total, totalPages }
+    const data = payload.data || [];
+    currentPage = payload.page || 1;
+    currentLimit = payload.limit || limit;
+
     if (!Array.isArray(data) || data.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5">Nenhum serviço cadastrado.</td></tr>';
+      renderPagination(payload);
       return;
     }
+
     tbody.innerHTML = data.map(s => `
       <tr data-id="${s._id}">
         <td>${s.name}</td>
@@ -72,9 +82,46 @@ async function render() {
         </td>
       </tr>
     `).join('');
+
+    renderPagination(payload);
   } catch (err) {
     tbody.innerHTML = '<tr><td colspan="5">Erro ao carregar serviços.</td></tr>';
   }
+}
+
+function renderPagination(payload) {
+  const pagination = document.getElementById('paginationControls');
+  pagination.innerHTML = '';
+  const page = payload.page || 1;
+  const totalPages = payload.totalPages || 1;
+
+  function addItem(label, p, disabled = false, active = false) {
+    const li = document.createElement('li');
+    li.className = 'page-item' + (disabled ? ' disabled' : '') + (active ? ' active' : '');
+    li.innerHTML = `<a class="page-link" href="#" data-page="${p}">${label}</a>`;
+    pagination.appendChild(li);
+  }
+
+  addItem('<<', 1, page === 1);
+  addItem('<', Math.max(1, page - 1), page === 1);
+
+  // show up to 5 pages around current
+  const start = Math.max(1, page - 2);
+  const end = Math.min(totalPages, page + 2);
+  for (let i = start; i <= end; i++) addItem(i, i, false, i === page);
+
+  addItem('>', Math.min(totalPages, page + 1), page === totalPages);
+  addItem('>>', totalPages, page === totalPages);
+
+  // attach click handler
+  pagination.querySelectorAll('a.page-link').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const p = Number(a.getAttribute('data-page')) || 1;
+      if (p === currentPage) return;
+      render(p, currentLimit);
+    });
+  });
 }
 
 document.getElementById('serviceForm').addEventListener('submit', async (e) => {
@@ -103,6 +150,14 @@ document.getElementById('serviceForm').addEventListener('submit', async (e) => {
 });
 
 document.getElementById('btnClear').addEventListener('click', () => document.getElementById('serviceForm').reset());
+
+// limit selector
+document.getElementById('selectLimit').addEventListener('change', (e) => {
+  const newLimit = Number(e.target.value) || 10;
+  currentLimit = newLimit;
+  currentPage = 1;
+  render(currentPage, currentLimit);
+});
 
 // Delegate clicks for edit/delete
 document.getElementById('servicesTable').addEventListener('click', async (e) => {
@@ -160,4 +215,6 @@ document.getElementById('saveEdit').addEventListener('click', async () => {
   }
 });
 
+// initialize limit selector and render first page
+document.getElementById('selectLimit').value = String(currentLimit);
 render();

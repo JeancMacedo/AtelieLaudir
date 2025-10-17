@@ -14,8 +14,19 @@ exports.createService = async (req, res) => {
 // Get all services
 exports.getAllServices = async (req, res) => {
   try {
-    const services = await Service.find().sort({ createdAt: -1 });
-    res.json(services);
+    // Pagination params
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+    const skip = (page - 1) * limit;
+
+    const [total, services] = await Promise.all([
+      Service.countDocuments(),
+      Service.find().sort({ createdAt: -1 }).skip(skip).limit(limit)
+    ]);
+
+    const totalPages = Math.ceil(total / limit) || 1;
+
+    res.json({ data: services, page, limit, total, totalPages });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

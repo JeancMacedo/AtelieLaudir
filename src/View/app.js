@@ -20,6 +20,26 @@ document.getElementById('btnFontReset').addEventListener('click', () => setFontS
 // Apply persisted font size on load
 applyFontSize(getFontSize());
 
+// Daltonic mode (colorblind) control
+const DALTON_KEY = 'atelie_dalton_mode';
+function isDaltonic() {
+  return localStorage.getItem(DALTON_KEY) === '1';
+}
+function setDaltonic(on) {
+  if (on) {
+    document.documentElement.classList.add('dalton-mode');
+    localStorage.setItem(DALTON_KEY, '1');
+    document.getElementById('btnColorblind').setAttribute('aria-pressed', 'true');
+  } else {
+    document.documentElement.classList.remove('dalton-mode');
+    localStorage.removeItem(DALTON_KEY);
+    document.getElementById('btnColorblind').setAttribute('aria-pressed', 'false');
+  }
+}
+document.getElementById('btnColorblind').addEventListener('click', () => setDaltonic(!isDaltonic()));
+// Apply persisted dalton mode on load
+setDaltonic(isDaltonic());
+
 async function fetchServices() {
   const res = await fetch('/services');
   return res.json();

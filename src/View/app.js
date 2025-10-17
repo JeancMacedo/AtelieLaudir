@@ -1,5 +1,25 @@
 const editModal = new bootstrap.Modal(document.getElementById('editModal'));
 
+// Font size controls
+const FONT_KEY = 'atelie_font_size';
+function applyFontSize(size) {
+  document.documentElement.style.fontSize = size + 'px';
+}
+function getFontSize() {
+  const v = localStorage.getItem(FONT_KEY);
+  return v ? Number(v) : 16;
+}
+function setFontSize(size) {
+  const final = Math.min(24, Math.max(12, size));
+  localStorage.setItem(FONT_KEY, String(final));
+  applyFontSize(final);
+}
+document.getElementById('btnFontIncrease').addEventListener('click', () => setFontSize(getFontSize() + 1));
+document.getElementById('btnFontDecrease').addEventListener('click', () => setFontSize(getFontSize() - 1));
+document.getElementById('btnFontReset').addEventListener('click', () => setFontSize(16));
+// Apply persisted font size on load
+applyFontSize(getFontSize());
+
 async function fetchServices() {
   const res = await fetch('/services');
   return res.json();

@@ -19,9 +19,16 @@ exports.getAllServices = async (req, res) => {
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     const skip = (page - 1) * limit;
 
+    const filter = {};
+    if (req.query.q) {
+      const q = req.query.q.trim();
+      const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      filter.$or = [ { name: re }, { description: re } ];
+    }
+
     const [total, services] = await Promise.all([
-      Service.countDocuments(),
-      Service.find().sort({ createdAt: -1 }).skip(skip).limit(limit)
+      Service.countDocuments(filter),
+      Service.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit)
     ]);
 
     const totalPages = Math.ceil(total / limit) || 1;

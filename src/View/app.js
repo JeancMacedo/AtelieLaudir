@@ -43,8 +43,11 @@ setDaltonic(isDaltonic());
 let currentPage = 1;
 let currentLimit = 10;
 
-async function fetchServices(page = 1, limit = 10) {
-  const res = await fetch(`/services?page=${page}&limit=${limit}`);
+let currentQuery = '';
+async function fetchServices(page = 1, limit = 10, q = '') {
+  const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+  if (q && q.trim()) params.set('q', q.trim());
+  const res = await fetch(`/services?${params.toString()}`);
   return res.json();
 }
 
@@ -58,7 +61,7 @@ async function render(page = currentPage, limit = currentLimit) {
   const tbody = document.getElementById('list');
   tbody.innerHTML = '<tr><td colspan="5">Carregando...</td></tr>';
   try {
-    const payload = await fetchServices(page, limit);
+    const payload = await fetchServices(page, limit, currentQuery);
     // payload: { data, page, limit, total, totalPages }
     const data = payload.data || [];
     currentPage = payload.page || 1;
@@ -113,13 +116,13 @@ function renderPagination(payload) {
   addItem('>', Math.min(totalPages, page + 1), page === totalPages);
   addItem('>>', totalPages, page === totalPages);
 
-  // attach click handler
+    // attach click handler
   pagination.querySelectorAll('a.page-link').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const p = Number(a.getAttribute('data-page')) || 1;
       if (p === currentPage) return;
-      render(p, currentLimit);
+        render(p, currentLimit);
     });
   });
 }
@@ -158,6 +161,24 @@ document.getElementById('selectLimit').addEventListener('change', (e) => {
   currentPage = 1;
   render(currentPage, currentLimit);
 });
+
+// Search input (debounce)
+function debounce(fn, wait = 300) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+}
+
+const inputSearch = document.getElementById('inputSearch');
+const clearSearchBtn = document.getElementById('btnClearSearch');
+
+const onSearch = debounce((value) => {
+  currentQuery = value || '';
+  currentPage = 1;
+  render(currentPage, currentLimit);
+}, 300);
+
+inputSearch.addEventListener('input', (e) => onSearch(e.target.value));
+clearSearchBtn.addEventListener('click', () => { inputSearch.value = ''; currentQuery = ''; render(1, currentLimit); });
 
 // Delegate clicks for edit/delete
 document.getElementById('servicesTable').addEventListener('click', async (e) => {

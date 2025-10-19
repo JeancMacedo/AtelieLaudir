@@ -1,118 +1,106 @@
 # 🧵 Projeto Ateliê Laudir
 
-## 1. Descrição do Projeto
+## 1. Visão Geral do Projeto
 
-O objetivo central deste projeto é desenvolver uma **vitrine digital** para o Ateliê Laudir que seja, ao mesmo tempo, moderna, informativa e de fácil navegação.
+[cite_start]Este projeto consiste no desenvolvimento de um site completo para o **Ateliê Laudir**, um negócio local com tradição artesanal desde o início dos anos 2000[cite: 1, 220]. [cite_start]O objetivo central é criar uma ferramenta de gestão digital que modernize sua presença online e, principalmente, ofereça autonomia para a proprietária gerenciar seus serviços de forma independente e eficiente[cite: 24, 28, 31].
 
-A plataforma foi projetada para:
-* Solidificar a presença online da marca.
-* Captar o interesse de novos clientes.
-* Facilitar o acesso a informações essenciais, como a proposta de valor e a gama de serviços disponíveis.
+A principal entrega é um sistema de gerenciamento de conteúdo (CRUD - Criar, Ler, Atualizar, Deletar) que permitirá ao ateliê:
+* [cite_start]Adicionar novos serviços de forma simplificada[cite: 14].
+* [cite_start]Visualizar e administrar a lista de ofertas disponíveis[cite: 16, 17].
+* [cite_start]Atualizar informações como preços, descrições e disponibilidade[cite: 19].
+* [cite_start]Remover serviços que foram descontinuados[cite: 21].
 
-A solução digital visa apoiar o crescimento de um **pequeno negócio local**, facilitando a organização dos serviços de costura e estética, além da comercialização de produtos.
+## 2. Autor do Projeto
 
----
+* [cite_start]**Desenvolvedor:** Jean Carlo Silva de Macedo [cite: 117]
+* [cite_start]**ID Acadêmico:** CP3030563 [cite: 118, 235]
+* [cite_start]**Repositório:** [github.com/JeancMacedo/AtelieLaudir](https://github.com/JeancMacedo/AtelieLaudir) [cite: 121, 124]
 
-## 2. Tecnologias Utilizadas
+[cite_start]*Observação: Este projeto foi inicialmente concebido em grupo, mas a partir da segunda entrega parcial, passou a ser desenvolvido e mantido individualmente*[cite: 228, 229, 230].
 
-As principais tecnologias aplicadas no desenvolvimento deste projeto são:
+## 3. Tecnologias Utilizadas
 
-* **Node.js**: Ambiente de execução do JavaScript no lado do servidor.
-* **MongoDB**: Banco de dados NoSQL utilizado para armazenar os dados da aplicação.
-* **HTML/CSS**: Linguagens de marcação e estilo para a construção da interface do usuário.
-* **JavaScript**: Linguagem de programação para a lógica do front-end e back-end.
+A aplicação foi construída utilizando as seguintes tecnologias e dependências:
 
----
+* [cite_start]**Backend:** Node.js [cite: 12]
+* [cite_start]**Banco de Dados:** MongoDB (NoSQL) [cite: 12, 37]
+* [cite_start]**Frontend:** HTML e CSS [cite: 12]
+* **Framework e Bibliotecas:**
+    * [cite_start]`Express` [cite: 126]
+    * [cite_start]`Mongoose` [cite: 126]
+    * [cite_start]`Nodemon` [cite: 126]
+    * [cite_start]`Dotenv` [cite: 126]
 
-## 3. Entidades e Estrutura do Banco de Dados
+## 4. Estrutura do Projeto (MVC)
 
-O sistema foi modelado com base nas seguintes entidades principais:
+[cite_start]O projeto segue a arquitetura MVC (Model-View-Controller) para organizar o código de forma clara e escalável[cite: 80].
 
-* **Serviços de Costura**: Armazena os serviços oferecidos para o CRUD (Criar, ler, atualizar, deletar).
-* **Serviços de Estética**: Exibe os serviços de estética, e seus valores. 
-* **Projetos**: Funciona como o portfólio da vitrine digital, exibindo os trabalhos anteriores.
-* **Usuários**: Armazena as credenciais para acesso ao painel administrativo onde o CRUD será gerenciado.
-* **Agendamentos**: Representa o agendamento de um serviço (costura, estética, etc.) feito por um cliente.
+ATELIELAUDIR/ │ ├── node_modules/ ├── src/ │ ├── Controller/ │ │ └── serviceController.js # Controla a lógica de negócio  │ ├── Model/ │ │ └── service.js # Define o schema do banco de dados  │ ├── routes/ │ │ └── serviceRoutes.js # Define as rotas da API  │ └── View/ │ ├── app.js │ └── index.html # Interface do usuário  │ ├── .env.example # Arquivo de exemplo para variáveis de ambiente  ├── .gitignore ├── package-lock.json ├── package.json └── README.md
 
-O banco de dados, nomeado `atelie_laudir`, é composto pelas coleções `servicos`, `projetos` e `usuarios`, que armazenam as informações conforme o schema definido no diagrama do projeto.
+## 5. Estrutura do Banco de Dados
 
----
+O banco de dados utilizado é o **MongoDB**, com o nome `atelie_laudir`[cite: 45, 48, 72]. A principal coleção é a `services`[cite: 174], que armazena os serviços oferecidos.
 
-## 4. Funcionalidades Principais (CRUD)
+### Schema do Serviço (`Service`)
 
-O núcleo do sistema é um **CRUD** (Create, Read, Update, Delete) que permite o gerenciamento completo dos serviços oferecidos. As funcionalidades incluem:
+A estrutura para cada serviço no banco de dados é definida pelo seguinte schema Mongoose[cite: 63, 66]:
 
-* **Create**: Adicionar novos serviços (ex: "Customização de Vestidos").
-* **Read**: Visualizar todos os serviços em uma lista administrativa.
-* **Update**: Editar preços, descrições e disponibilidade dos serviços.
-* **Delete**: Remover serviços que não são mais oferecidos.
+```javascript
+const ServiceSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    description: { type: String, default: '' },
+    price: { type: Number, required: true, min: 0 },
+    available: { type: Boolean, default: true },
+    createdAt: { type: Date, default: Date.now }
+});
+```
+module.exports = mongoose.model('Service', ServiceSchema);
 
----
+6. Como Executar o Projeto Localmente
+Siga os passos abaixo para configurar e iniciar o ambiente de desenvolvimento.
 
-## 5. Telas e Fluxos Principais
+Pré-requisitos:
 
-A aplicação conta com telas essenciais para apresentar o ateliê e permitir a interação do usuário:
+Node.js (versão 16 ou superior).
 
-* **Página Inicial / Nossa História**: Apresenta a história do Ateliê Laudir e sua fundadora.
-* **Fale Conosco**: Exibe informações de contato e um formulário para envio de mensagens.
+MongoDB Community Server instalado localmente ou uma conta no MongoDB Atlas (nuvem).
 
----
 
-## Como rodar localmente (Node + MongoDB)
+MongoDB Compass (recomendado para visualizar o banco de dados).
 
-Passos rápidos para executar a API localmente:
+Passos para Instalação
 
-1. Instale Node.js (v16+).
-2. Na raiz do projeto rode:
+1° Clone o repositório:
+git clone [https://github.com/JeancMacedo/AtelieLaudir.git](https://github.com/JeancMacedo/AtelieLaudir.git)
+cd AtelieLaudir
 
-	npm install
+2° Instale as dependências do projeto através do npm:
+npm install express dotenv mongoose nodemon
 
-3. Crie um arquivo `.env` copiando `.env.example` e ajuste `MONGODB_URI` se necessário.
+3° Configure as variáveis de ambiente:
+Crie um arquivo chamado .env na raiz do projeto, copiando o conteúdo de .env.example.
+ - Ajuste a variável MONGODB_URI se necessário.
+ - O padrão para uma instalação local é:
+   MONGODB_URI=mongodb://localhost:27017/atelie_laudir
 
-4. Inicie o servidor em modo desenvolvimento:
+4°(Opcional) Conecte-se com o MongoDB Compass:
 
+Abra o MongoDB Compass e crie uma nova conexão.
+Use a URI mongodb://localhost:27017/atelie_laudir e clique em "Save & Connect".
+Inicie o servidor: Execute um dos seguintes comandos no terminal:
 	npm run dev
+	    ou
+	node src/server.js
 
-O servidor será iniciado em http://localhost:3000 por padrão.
+Após a inicialização, o terminal exibirá uma mensagem de sucesso, e o servidor estará disponível em http://localhost:3000.
 
-## MongoDB — instruções completas
+7. Rotas da API (CRUD de Serviços)
+GET /services -> Lista todos os serviços.
 
-Você pode usar MongoDB local (instalado no Windows) ou MongoDB Atlas (nuvem). A string de conexão padrão no projeto é:
+POST /services -> Cria um novo serviço.
 
-```
-mongodb://localhost:27017/atelie_laudir
-```
+GET /services/:id -> Obtém um serviço específico por ID.
 
-Opção A — MongoDB local no Windows:
+PUT /services/:id -> Atualiza um serviço existente.
 
-- Baixe o instalador do MongoDB Community Server: https://www.mongodb.com/try/download/community
-- Instale como serviço (opção recomendada). O banco usará por padrão o diretório C:\\data\\db.
-- Verifique o serviço no PowerShell:
-
-```powershell
-Get-Service -Name MongoDB* | Format-Table -AutoSize
-```
-
-Opção B — MongoDB Atlas (cloud):
-
-- Crie uma conta e um cluster grátis em https://www.mongodb.com/cloud/atlas
-- Configure Database Access (usuário/senha) e Network Access (seu IP de desenvolvimento).
-- Copie a string de conexão do Atlas para `MONGODB_URI` em `.env`.
-
-Exemplo:
-
-```
-MONGODB_URI=mongodb+srv://user:password@cluster0.abcd.mongodb.net/atelie_laudir?retryWrites=true&w=majority
-```
-
-## Rotas de API (inicial)
-
-GET /services  -> Lista todos os serviços (rota usada para teste inicial)
-POST /services -> Cria um novo serviço
-GET /services/:id -> Obtém um serviço por id
-PUT /services/:id -> Atualiza um serviço
-DELETE /services/:id -> Remove um serviço
-
----
-
-Se quiser, eu posso agora instalar as dependências e iniciar o servidor para verificar que tudo funciona (preciso que você permita rodar comandos no terminal). Caso prefira, eu também posso orientar passo-a-passo para você executar localmente.
+DELETE /services/:id -> Remove um serviço.

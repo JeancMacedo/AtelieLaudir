@@ -48,59 +48,136 @@ A estrutura para cada serviço no banco de dados é definida pelo seguinte schem
 ```javascript
 const ServiceSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    description: { type: String, default: '' },
-    price: { type: Number, required: true, min: 0 },
-    available: { type: Boolean, default: true },
-    createdAt: { type: Date, default: Date.now }
-});
-```
-module.exports = mongoose.model('Service', ServiceSchema);
+    # 🧵 Projeto Ateliê Laudir
 
-6. Como Executar o Projeto Localmente
-Siga os passos abaixo para configurar e iniciar o ambiente de desenvolvimento.
+    ## Visão Geral
 
-Pré-requisitos:
+    Este projeto implementa uma vitrine digital e painel administrativo para o Ateliê Laudir — um ateliê artesanal com atuação em Campinas (SP). A aplicação fornece um CRUD para gerenciar serviços (criar, listar, atualizar e remover), além de uma interface administrativa simples.
 
-Node.js (versão 16 ou superior).
+    ## Autor
 
-MongoDB Community Server instalado localmente ou uma conta no MongoDB Atlas (nuvem).
+    - Desenvolvedor: Jean Carlo Silva de Macedo
+    - ID Acadêmico: CP3030563
+    - Repositório: https://github.com/JeancMacedo/AtelieLaudir
 
+    > Observação: o projeto teve contribuições coletivas inicialmente, mas a manutenção atual é feita individualmente.
 
-MongoDB Compass (recomendado para visualizar o banco de dados).
+    ## Tecnologias
 
-Passos para Instalação
+    - Node.js (backend)
+    - Express
+    - Mongoose (MongoDB)
+    - MongoDB (banco de dados)
+    - HTML, CSS (frontend)
+    - Nodemon (desenvolvimento)
+    - Dotenv (variáveis de ambiente)
 
-1° Clone o repositório:
-git clone [https://github.com/JeancMacedo/AtelieLaudir.git](https://github.com/JeancMacedo/AtelieLaudir.git)
-cd AtelieLaudir
+    ## Estrutura do Projeto (resumida)
 
-2° Instale as dependências do projeto através do npm:
-npm install express dotenv mongoose nodemon
+    AtelieLaudir/
+    - node_modules/
+    - src/
+        - Controller/
+            - serviceController.js
+        - Model/
+            - service.js
+        - routes/
+            - serviceRoutes.js
+        - View/
+            - index.html
+            - app.js
+    - .env.example
+    - package.json
+    - README.md
 
-3° Configure as variáveis de ambiente:
-Crie um arquivo chamado .env na raiz do projeto, copiando o conteúdo de .env.example.
- - Ajuste a variável MONGODB_URI se necessário.
- - O padrão para uma instalação local é:
-   MONGODB_URI=mongodb://localhost:27017/atelie_laudir
+    ## Banco de Dados
 
-4°(Opcional) Conecte-se com o MongoDB Compass:
+    Banco: `atelie_laudir` (MongoDB)
 
-Abra o MongoDB Compass e crie uma nova conexão.
-Use a URI mongodb://localhost:27017/atelie_laudir e clique em "Save & Connect".
-Inicie o servidor: Execute um dos seguintes comandos no terminal:
-	npm run dev
-	    ou
-	node src/server.js
+    Coleção principal: `services`
 
-Após a inicialização, o terminal exibirá uma mensagem de sucesso, e o servidor estará disponível em http://localhost:3000.
+    Schema Mongoose (Service):
 
-7. Rotas da API (CRUD de Serviços)
-GET /services -> Lista todos os serviços.
+    ```javascript
+    const ServiceSchema = new mongoose.Schema({
+        name: { type: String, required: true },
+        description: { type: String, default: '' },
+        price: { type: Number, required: true, min: 0 },
+        available: { type: Boolean, default: true },
+        createdAt: { type: Date, default: Date.now }
+    });
 
-POST /services -> Cria um novo serviço.
+    module.exports = mongoose.model('Service', ServiceSchema);
+    ```
 
-GET /services/:id -> Obtém um serviço específico por ID.
+    ## Como executar localmente
 
-PUT /services/:id -> Atualiza um serviço existente.
+    Pré-requisitos:
 
-DELETE /services/:id -> Remove um serviço.
+    - Node.js v16+ instalado
+    - MongoDB Community Server (local) ou cluster no MongoDB Atlas
+
+    Passos:
+
+    1. Clone o repositório e entre na pasta:
+
+    ```bash
+    git clone https://github.com/JeancMacedo/AtelieLaudir.git
+    cd AtelieLaudir
+    ```
+
+    2. Instale dependências:
+
+    ```bash
+    npm install
+    ```
+
+    3. Configure variáveis de ambiente:
+
+    - Copie `.env.example` para `.env` na raiz do projeto e ajuste `MONGODB_URI` se necessário.
+    - Exemplo (local):
+
+    ```env
+    MONGODB_URI=mongodb://localhost:27017/atelie_laudir
+    PORT=3000
+    ```
+
+    4. Inicie o servidor (desenvolvimento):
+
+    ```bash
+    npm run dev
+    # ou
+    node src/server.js
+    ```
+
+    Abra http://localhost:3000 no navegador.
+
+    ## Uso com MongoDB Compass (opcional)
+
+    - Abra o MongoDB Compass e conecte usando a URI definida em `MONGODB_URI` (por exemplo, `mongodb://localhost:27017/atelie_laudir`).
+
+    ## Rotas da API (serviços)
+
+    - GET /services               → lista serviços (suporta paginação com `?page=` e `?limit=`)
+    - POST /services              → cria um novo serviço
+    - GET /services/:id           → obtém um serviço por id
+    - PUT /services/:id           → atualiza um serviço
+    - DELETE /services/:id        → remove um serviço
+
+    Observação: a rota GET `/services` retorna, quando a paginação estiver habilitada, um objeto com metadados e a lista em `data`:
+
+    ```json
+    {
+        "data": [ /* array de serviços */ ],
+        "page": 1,
+        "limit": 10,
+        "total": 42,
+        "totalPages": 5
+    }
+    ```
+
+    ## Próximos passos e ideias
+
+    - Adicionar filtros de busca (campo `q`) para pesquisar por nome/descrição.
+    - Implementar autenticação para o painel administrativo.
+    - Adicionar uma interface pública (vitrine) para exibir os serviços no site.

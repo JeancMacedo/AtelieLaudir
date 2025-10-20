@@ -35,7 +35,25 @@ A aplicação foi construída utilizando as seguintes tecnologias e dependência
 
 O projeto segue a arquitetura MVC (Model-View-Controller) para organizar o código de forma clara e escalável.
 
-ATELIELAUDIR/ │ ├── node_modules/ ├── src/ │ ├── Controller/ │ │ └── serviceController.js # Controla a lógica de negócio  │ ├── Model/ │ │ └── service.js # Define o schema do banco de dados  │ ├── routes/ │ │ └── serviceRoutes.js # Define as rotas da API  │ └── View/ │ ├── app.js │ └── index.html # Interface do usuário  │ ├── .env.example # Arquivo de exemplo para variáveis de ambiente  ├── .gitignore ├── package-lock.json ├── package.json └── README.md
+   ```## Estrutura do Projeto
+
+    AtelieLaudir/
+    - node_modules/
+    - src/
+        - Controller/
+            - serviceController.js
+        - Model/
+            - service.js
+        - routes/
+            - serviceRoutes.js
+        - View/
+            - index.html
+            - app.js
+        - server.js
+    - .env.example
+    - package.json
+    - README.md
+```
 
 ## 5. Estrutura do Banco de Dados
 
@@ -71,25 +89,6 @@ const ServiceSchema = new mongoose.Schema({
     - HTML, CSS (frontend)
     - Nodemon (desenvolvimento)
     - Dotenv (variáveis de ambiente)
-
-    ## Estrutura do Projeto (resumida)
-
-    AtelieLaudir/
-    - node_modules/
-    - src/
-        - Controller/
-            - serviceController.js
-        - Model/
-            - service.js
-        - routes/
-            - serviceRoutes.js
-        - View/
-            - index.html
-            - app.js
-        - server.js
-    - .env.example
-    - package.json
-    - README.md
 
     ## Banco de Dados
 

@@ -57,11 +57,11 @@ O projeto segue a arquitetura MVC (Model-View-Controller) para organizar o códi
 
 ## 5. Estrutura do Banco de Dados
 
-O banco de dados utilizado é o **MongoDB**, com o nome `atelie_laudir`[cite: 45, 48, 72]. A principal coleção é a `services`[cite: 174], que armazena os serviços oferecidos.
+O banco de dados utilizado é o **MongoDB**, com o nome `atelie_laudir`. A principal coleção é a `services`, que armazena os serviços oferecidos.
 
 ### Schema do Serviço (`Service`)
 
-A estrutura para cada serviço no banco de dados é definida pelo seguinte schema Mongoose[cite: 63, 66]:
+A estrutura para cada serviço no banco de dados é definida pelo seguinte schema Mongoose:
 
 ```javascript
 const ServiceSchema = new mongoose.Schema({

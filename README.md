@@ -2,38 +2,38 @@
 
 ## 1. Visão Geral do Projeto
 
-[cite_start]Este projeto consiste no desenvolvimento de um site completo para o **Ateliê Laudir**, um negócio local com tradição artesanal desde o início dos anos 2000[cite: 1, 220]. [cite_start]O objetivo central é criar uma ferramenta de gestão digital que modernize sua presença online e, principalmente, ofereça autonomia para a proprietária gerenciar seus serviços de forma independente e eficiente[cite: 24, 28, 31].
+Este projeto consiste no desenvolvimento de um site completo para o **Ateliê Laudir**, um negócio local com tradição artesanal desde o início dos anos 2000. O objetivo central é criar uma ferramenta de gestão digital que modernize sua presença online e, principalmente, ofereça autonomia para a proprietária gerenciar seus serviços de forma independente e eficiente.
 
 A principal entrega é um sistema de gerenciamento de conteúdo (CRUD - Criar, Ler, Atualizar, Deletar) que permitirá ao ateliê:
-* [cite_start]Adicionar novos serviços de forma simplificada[cite: 14].
-* [cite_start]Visualizar e administrar a lista de ofertas disponíveis[cite: 16, 17].
-* [cite_start]Atualizar informações como preços, descrições e disponibilidade[cite: 19].
-* [cite_start]Remover serviços que foram descontinuados[cite: 21].
+* Adicionar novos serviços de forma simplificada.
+* Visualizar e administrar a lista de ofertas disponíveis.
+* Atualizar informações como preços, descrições e disponibilidade.
+* Remover serviços que foram descontinuados.
 
 ## 2. Autor do Projeto
 
-* [cite_start]**Desenvolvedor:** Jean Carlo Silva de Macedo [cite: 117]
-* [cite_start]**ID Acadêmico:** CP3030563 [cite: 118, 235]
-* [cite_start]**Repositório:** [github.com/JeancMacedo/AtelieLaudir](https://github.com/JeancMacedo/AtelieLaudir) [cite: 121, 124]
+* **Desenvolvedor:** Jean Carlo Silva de Macedo
+* **ID Acadêmico:** CP3030563 
+* **Repositório:** [github.com/JeancMacedo/AtelieLaudir](https://github.com/JeancMacedo/AtelieLaudir)
 
-[cite_start]*Observação: Este projeto foi inicialmente concebido em grupo, mas a partir da segunda entrega parcial, passou a ser desenvolvido e mantido individualmente*[cite: 228, 229, 230].
+*Observação: Este projeto foi inicialmente concebido em grupo, mas a partir da segunda entrega parcial, passou a ser desenvolvido e mantido individualmente*.
 
 ## 3. Tecnologias Utilizadas
 
 A aplicação foi construída utilizando as seguintes tecnologias e dependências:
 
-* [cite_start]**Backend:** Node.js [cite: 12]
-* [cite_start]**Banco de Dados:** MongoDB (NoSQL) [cite: 12, 37]
-* [cite_start]**Frontend:** HTML e CSS [cite: 12]
+* **Backend:** Node.js
+* **Banco de Dados:** MongoDB (NoSQL)
+* **Frontend:** HTML e CSS
 * **Framework e Bibliotecas:**
-    * [cite_start]`Express` [cite: 126]
-    * [cite_start]`Mongoose` [cite: 126]
-    * [cite_start]`Nodemon` [cite: 126]
-    * [cite_start]`Dotenv` [cite: 126]
+    * `Express` 
+    * `Mongoose` 
+    * `Nodemon` 
+    * `Dotenv` 
 
 ## 4. Estrutura do Projeto (MVC)
 
-[cite_start]O projeto segue a arquitetura MVC (Model-View-Controller) para organizar o código de forma clara e escalável[cite: 80].
+O projeto segue a arquitetura MVC (Model-View-Controller) para organizar o código de forma clara e escalável.
 
 ATELIELAUDIR/ │ ├── node_modules/ ├── src/ │ ├── Controller/ │ │ └── serviceController.js # Controla a lógica de negócio  │ ├── Model/ │ │ └── service.js # Define o schema do banco de dados  │ ├── routes/ │ │ └── serviceRoutes.js # Define as rotas da API  │ └── View/ │ ├── app.js │ └── index.html # Interface do usuário  │ ├── .env.example # Arquivo de exemplo para variáveis de ambiente  ├── .gitignore ├── package-lock.json ├── package.json └── README.md
 
@@ -86,6 +86,7 @@ const ServiceSchema = new mongoose.Schema({
         - View/
             - index.html
             - app.js
+        - server.js
     - .env.example
     - package.json
     - README.md
@@ -176,8 +177,5 @@ const ServiceSchema = new mongoose.Schema({
     }
     ```
 
-    ## Próximos passos e ideias
-
-    - Adicionar filtros de busca (campo `q`) para pesquisar por nome/descrição.
+    ## Próximos passos
     - Implementar autenticação para o painel administrativo.
-    - Adicionar uma interface pública (vitrine) para exibir os serviços no site.

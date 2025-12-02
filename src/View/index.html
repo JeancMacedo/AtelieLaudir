@@ -16,8 +16,9 @@
   <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Ateliê Laudir</a>
-        <span class="text-white-50 me-auto">Painel administrativo</span>
+      <a class="navbar-brand" href="#">Ateliê Laudir</a>
+      <span class="text-white-50 me-auto">Painel administrativo</span>
+      <span id="navUser" class="text-white-50 me-3"></span>
         <div class="d-flex align-items-center">
           <div class="btn-group me-2" role="group" aria-label="Ajuste de fonte">
             <button class="btn btn-sm btn-light" id="btnFontDecrease" title="Diminuir fonte">A-</button>
@@ -36,29 +37,78 @@
         <div class="col-lg-5 mb-4">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">Adicionar / Novo Serviço</h5>
-              <form id="serviceForm">
-                <div class="mb-2">
-                  <label class="form-label">Nome</label>
-                  <input class="form-control" type="text" id="name" required />
+              <h5 class="card-title">Acesso</h5>
+              <div id="authArea">
+                <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-login" data-bs-toggle="tab" data-bs-target="#pane-login" type="button" role="tab">Login</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-register" data-bs-toggle="tab" data-bs-target="#pane-register" type="button" role="tab">Registro</button>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="pane-login" role="tabpanel">
+                    <form id="loginForm">
+                      <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" type="email" id="loginEmail" required />
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label">Senha</label>
+                        <input class="form-control" type="password" id="loginPassword" required />
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit">Entrar</button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="tab-pane fade" id="pane-register" role="tabpanel">
+                    <form id="registerForm">
+                      <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" type="email" id="regEmail" required />
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label">Senha</label>
+                        <input class="form-control" type="password" id="regPassword" required />
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" type="submit">Registrar</button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
-                <div class="mb-2">
-                  <label class="form-label">Descrição</label>
-                  <textarea class="form-control" id="description" rows="3"></textarea>
-                </div>
-                <div class="mb-2">
-                  <label class="form-label">Preço (R$)</label>
-                  <input class="form-control" type="number" id="price" required min="0" step="0.01" />
-                </div>
-                <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="available" checked />
-                  <label class="form-check-label" for="available">Disponível</label>
-                </div>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-primary" type="submit">Salvar</button>
-                  <button class="btn btn-secondary" type="button" id="btnClear">Limpar</button>
-                </div>
-              </form>
+              </div>
+
+              <div id="serviceArea" style="display:none;">
+                <h5 class="card-title">Adicionar / Novo Serviço</h5>
+                <form id="serviceForm">
+                  <div class="mb-2">
+                    <label class="form-label">Nome</label>
+                    <input class="form-control" type="text" id="name" required />
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-control" id="description" rows="3"></textarea>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Preço (R$)</label>
+                    <input class="form-control" type="number" id="price" required min="0" step="0.01" />
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="available" checked />
+                    <label class="form-check-label" for="available">Disponível</label>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <button class="btn btn-secondary" type="button" id="btnClear">Limpar</button>
+                    <button class="btn btn-outline-danger ms-auto" type="button" id="btnLogout">Sair</button>
+                  </div>
+                </form>
+              </div>
+
             </div>
           </div>
         </div>

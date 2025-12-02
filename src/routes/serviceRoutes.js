@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../Controller/serviceController');
+const auth = require('../middleware/auth');
 
 // For now expose GET /services to list services (to test)
 router.get('/', controller.getAllServices);
 
-// Full CRUD (commented - ready to use)
-router.post('/', controller.createService);
-router.get('/:id', controller.getService);
-router.put('/:id', controller.updateService);
-router.delete('/:id', controller.deleteService);
+// Full CRUD (protected write operations)
+router.post('/', auth, controller.createService);
+router.get('/:id', auth, controller.getService);
+router.put('/:id', auth, controller.updateService);
+router.delete('/:id', auth, controller.deleteService);
 
 module.exports = router;

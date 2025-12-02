@@ -6,7 +6,6 @@ O objetivo central deste projeto é desenvolver uma **vitrine digital** para o A
 
 A plataforma foi projetada para:
 * Solidificar a presença online da marca.
-* Captar o interesse de novos clientes.
 * Facilitar o acesso a informações essenciais, como a proposta de valor e a gama de serviços disponíveis.
 
 A solução digital visa apoiar o crescimento de um **pequeno negócio local**, facilitando a organização dos serviços de costura e estética, além da comercialização de produtos.
@@ -115,10 +114,6 @@ DELETE /services/:id -> Remove um serviço
 
 ---
 
-Se quiser, eu posso agora instalar as dependências e iniciar o servidor para verificar que tudo funciona (preciso que você permita rodar comandos no terminal). Caso prefira, eu também posso orientar passo-a-passo para você executar localmente.
-
----
-
 **Autenticação (JWT)**
 
 O projeto agora inclui autenticação baseada em JWT com refresh tokens rotativos.
@@ -168,7 +163,3 @@ npm test
 ```
 
 Os testes cobrem o fluxo: registrar usuário, login, criar um serviço protegido, refresh de token e logout.
-
----
-
-Se quiser, eu executo `npm install` e `npm test` agora e retorno os resultados. Quer que eu rode os testes automaticamente no seu ambiente? 

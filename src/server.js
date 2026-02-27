@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 const serviceRoutes = require('./routes/serviceRoutes');
 const authRoutes = require('./routes/authRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use('/auth', authRoutes);
 
 // Mount service routes
 app.use('/services', serviceRoutes);
+app.use('/chats', chatRoutes);
 
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/atelie_laudir';
 

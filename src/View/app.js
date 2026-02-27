@@ -1,10 +1,24 @@
 const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+const chatModal = new bootstrap.Modal(document.getElementById('chatModal'));
 
 // --- Authentication helpers ---
 const ACCESS_KEY = 'atelie_access_token';
 function getAccessToken() { return localStorage.getItem(ACCESS_KEY); }
 function setAccessToken(t) { if (t) localStorage.setItem(ACCESS_KEY, t); }
 function clearAccessToken() { localStorage.removeItem(ACCESS_KEY); }
+
+function escapeHtml(value) {
+	const div = document.createElement('div');
+	div.textContent = value == null ? '' : String(value);
+	return div.innerHTML;
+}
+
+function formatDateTime(value) {
+	if (!value) return '';
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return '';
+	return date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+}
 
 function showAuthArea(authenticated) {
 	const authArea = document.getElementById('authArea');
@@ -13,6 +27,7 @@ function showAuthArea(authenticated) {
 		authArea.style.display = authenticated ? 'none' : '';
 		serviceArea.style.display = authenticated ? '' : 'none';
 	}
+	renderChatHistory();
 }
 
 async function apiFetch(url, opts = {}) {
@@ -158,6 +173,66 @@ function renderPagination(payload) {
 	});
 }
 
+async function fetchChats() {
+	const res = await apiFetch('/chats');
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.error || 'Erro ao carregar chats');
+	}
+	return res.json();
+}
+
+async function fetchChatById(id) {
+	const res = await apiFetch(`/chats/${id}`);
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.error || 'Erro ao carregar chat');
+	}
+	return res.json();
+}
+
+function renderChatHistoryMessage(message, type = 'muted') {
+	const list = document.getElementById('chatHistoryList');
+	if (list) {
+		list.innerHTML = `<div class="text-${type}">${message}</div>`;
+	}
+}
+
+async function renderChatHistory() {
+	const list = document.getElementById('chatHistoryList');
+	if (!list) return;
+	if (!getAccessToken()) {
+		renderChatHistoryMessage('Faça login para visualizar o histórico de chats.');
+		return;
+	}
+	list.innerHTML = '<div class="text-muted">Carregando...</div>';
+	try {
+		const payload = await fetchChats();
+		const chats = payload.data || [];
+		if (!Array.isArray(chats) || chats.length === 0) {
+			renderChatHistoryMessage('Nenhum chat encontrado.');
+			return;
+		}
+		list.innerHTML = chats.map(chat => {
+			const lastPreview = chat.lastMessage && chat.lastMessage.content ? chat.lastMessage.content : 'Sem mensagens registradas';
+			const messageCount = typeof chat.messageCount === 'number' ? chat.messageCount : 0;
+			const updated = formatDateTime(chat.updatedAt);
+			return `
+				<button type="button" class="list-group-item list-group-item-action" data-id="${chat._id}">
+					<div class="d-flex w-100 justify-content-between">
+						<h6 class="mb-1">${escapeHtml(chat.title)}</h6>
+						<small>${escapeHtml(updated)}</small>
+					</div>
+					<p class="mb-1 text-truncate">${escapeHtml(lastPreview)}</p>
+					<small>${messageCount} mensagem(ns)</small>
+				</button>
+			`;
+		}).join('');
+	} catch (err) {
+		renderChatHistoryMessage('Erro ao carregar histórico.', 'danger');
+	}
+}
+
 // Service form submit (create)
 document.addEventListener('submit', async (e) => {
 	if (e.target && e.target.id === 'serviceForm') {
@@ -234,6 +309,48 @@ document.getElementById('servicesTable').addEventListener('click', async (e) => 
 		}
 	}
 });
+
+const chatHistoryList = document.getElementById('chatHistoryList');
+if (chatHistoryList) {
+	chatHistoryList.addEventListener('click', async (e) => {
+		const item = e.target.closest('[data-id]');
+		if (!item) return;
+		const id = item.getAttribute('data-id');
+		if (!id) return;
+		try {
+			const chat = await fetchChatById(id);
+			const titleText = chat.title ? String(chat.title) : 'Histórico do chat';
+			const messages = Array.isArray(chat.messages) ? chat.messages : [];
+			const messageHtml = messages.length ? messages.map(msg => {
+				const sender = escapeHtml(msg.sender || '---');
+				const content = escapeHtml(msg.content || '');
+				const sentAt = formatDateTime(msg.sentAt);
+				return `
+					<div class="border rounded p-2 mb-2">
+						<div class="d-flex justify-content-between">
+							<strong>${sender}</strong>
+							<small class="text-muted">${escapeHtml(sentAt)}</small>
+						</div>
+						<div>${content}</div>
+					</div>
+				`;
+			}).join('') : '<div class="text-muted">Sem mensagens registradas.</div>';
+
+			const titleEl = document.getElementById('chatModalLabel');
+			if (titleEl) titleEl.textContent = titleText;
+			const messagesEl = document.getElementById('chatMessages');
+			if (messagesEl) messagesEl.innerHTML = messageHtml;
+			chatModal.show();
+		} catch (err) {
+			showAlert('Erro ao carregar chat: ' + err.message, 'danger');
+		}
+	});
+}
+
+const refreshChatsBtn = document.getElementById('btnRefreshChats');
+if (refreshChatsBtn) {
+	refreshChatsBtn.addEventListener('click', () => renderChatHistory());
+}
 
 document.getElementById('saveEdit').addEventListener('click', async () => {
 	const id = document.getElementById('editId').value;

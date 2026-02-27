@@ -112,6 +112,10 @@ GET /services/:id -> Obtém um serviço por id
 PUT /services/:id -> Atualiza um serviço
 DELETE /services/:id -> Remove um serviço
 
+GET /chats -> Lista o histórico de outros chats (requer autenticação)
+GET /chats/:id -> Detalha um chat específico com mensagens
+POST /chats -> Cria um histórico de chat
+
 ---
 
 **Autenticação (JWT)**
